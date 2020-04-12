@@ -9,4 +9,6 @@ spec:
     predictor:
       custom:
         container:
-          image: {docker_username}/kfserving-iris-classifier
+          image: {docker_username}/iris-classifier
+          ports:
+            - containerPort: 5000
