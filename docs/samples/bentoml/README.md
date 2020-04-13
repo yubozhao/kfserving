@@ -19,7 +19,7 @@ pip install -r requirements.txt
 Start Jupyter and open the notebook
 
 ```shell
-jupyter notebook custom-bentoml.ipynb
+jupyter notebook bentoml.ipynb
 ```
 
 Follow the instructions in the notebook to deploy the InferenseService.
