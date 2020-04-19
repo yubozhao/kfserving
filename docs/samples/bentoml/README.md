@@ -1,18 +1,19 @@
 # Predict on an InferenceService using BentoML
 
-In this example, it builds a classifier model using the iris data set with Scikit-learn
-and save the model with BentoML, builds and pushes an API server image to the Docker Hub,
-and then deploys the images as InferenceService to a cluster with KFServing installed for
-inferencing.
+This example builds a classification model using the iris data set with Scikit-learn
+and save the model with BentoML, and then builds and pushes an API server image to the
+Docker Hub, and finally deploys the images as InferenceService to a cluster with KFServing
+installed for inferencing.
 
 [BentoML](https://bentoml.org) is an open-source framework for high-performance ML model
-serving. It bundles ML model, preprocessing/post-processing code, model dependencies
+serving. It bundles ML models, preprocessing/post-processing code, model dependencies
 and model configuration into an API server that is ready to deploy to platforms such as
 AWS Lambda, Sagemaker, Google Cloud Run, Kubernetes, KNative, and more.
 
-BentoML supports all major machine learning frameworks including Keras, Tensorflow, PyTorch, Fast.ai, XGBoost and etc.
+BentoML supports all major machine learning frameworks including Keras, Tensorflow,
+PyTorch, Fast.ai, XGBoost and etc.
 
-## Deploy a custom InferenceService using BentoML
+## Deploy a custom InferenceService
 
 ### Setup
 
@@ -29,7 +30,7 @@ BentoML supports all major machine learning frameworks including Keras, Tensorfl
 
 BentoML creates a model API server, via prediction service abstraction.
 
-The following code defines a prediction service that requires a scikit-learn model,
+The following code defines a prediction service that requires a `scikit-learn` model,
 and asks BentoML to figure out the required PyPI pip packages automatically. It
 also defined an API, which is the entry point for accessing this prediction service.
 And the API is expecting a `pandas.DataFrame` object as its input data.
@@ -92,15 +93,14 @@ docker build -t $docker_username/iris-classifier $model_path
 docker push $docker_username/iris-classifier
 ```
 
-BentoML's REST interface is different than the Tensorflow V1 HTTP API that KFServing
-expects. Requests send directly to the prediction service and bypass the top-level
-InferenceService.
+*Note: BentoML's REST interface is different than the Tensorflow V1 HTTP API that
+KFServing expects. Requests send directly to the prediction service and bypass the
+top-level InferenceService.*
 
-*Note: Support for KFserving V2 prediction protocol with BentoML is coming soon.*
+*Support for KFserving V2 prediction protocol with BentoML is coming soon.*
 
-
-Replace the `{docker_username}` with your Docker Hub user name and save to a file named
-`bentoml.yaml`:
+Replace the `{docker_username}` with your Docker Hub username and save the code to a
+file named `bentoml.yaml`:
 
 ```yaml
 apiVersion: serving.kubeflow.org/v1alpha2
@@ -119,7 +119,7 @@ spec:
             - containerPort: 5000
 ```
 
-Use `kubectl apply` to create new InferenceService:
+Use `kubectl apply` to create a new InferenceService:
 
 ```shell
 kubectl apply -f bentoml.yaml
