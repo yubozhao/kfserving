@@ -2,8 +2,8 @@
 
 This example builds a classification model using the iris data set with Scikit-learn
 and save the model with BentoML, and then builds and pushes an API server image to the
-Docker Hub, and finally deploys the images as InferenceService to a cluster with KFServing
-installed for inferencing.
+Docker Hub, and finally deploys the images as InferenceService to a KFServing installed
+cluster for inferencing.
 
 [BentoML](https://bentoml.org) is an open-source framework for high-performance ML model
 serving. It bundles ML models, preprocessing/post-processing code, model dependencies
@@ -19,9 +19,9 @@ PyTorch, Fast.ai, XGBoost and etc.
 
 * Your ~/.kube/config should point to a cluster with KFServing installed.
 * Your cluster's Istio Ingress gateway must be network accessible.
-* Docker and Docker hub must be properly configured
+* Docker and Docker hub must be properly configured on your local system
 * Python 3.6 or above
-  * Install required packages `bentoml` and `scikit-learn`:
+  * Install required packages `bentoml` and `scikit-learn` on your local system:
     ```shell
     pip install bentoml scikit-learn
     ```
@@ -94,7 +94,7 @@ docker push $docker_username/iris-classifier
 ```
 
 *Note: BentoML's REST interface is different than the Tensorflow V1 HTTP API that
-KFServing expects. Requests send directly to the prediction service and bypass the
+KFServing expects. Requests will send directly to the prediction service and bypass the
 top-level InferenceService.*
 
 *Support for KFserving V2 prediction protocol with BentoML is coming soon.*
