@@ -1,8 +1,8 @@
 # Predict on an InferenceService using BentoML
 
-This example builds a classification model using the iris data set with Scikit-learn
-and use BentoML to run a high-performance API server for the trained model and deploy it
-as InferenceService to KFServing installed cluster for inferencing.
+This example trains a classification model using the iris data set and uses BentoML to
+serve the model via its high-performance API server and lastly deploy the BenoML API
+server as an InferenceService to a KFServing installed cluster for inferencing.
 
 [BentoML](https://bentoml.org) is an open-source framework for high-performance ML model
 serving. It bundles ML models, preprocessing/post-processing code, model dependencies
