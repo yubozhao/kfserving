@@ -50,10 +50,7 @@ class IrisClassifier(BentoService):
         return self.artifacts.model.predict(df)
 ```
 
-The following code to create a BentoService SavedBundle with the trained an iris
-classification model. A BentoService SavedBundle is a versioned file archive ready for
-production deployment. The archive contains the model server defined above, python code
-dependencies, PyPi dependencies, and the trained iris classification model:
+The following code trains a classifier model and serve it with the IrisClassifier defined above:
 
 ```python
 # main.py
@@ -81,7 +78,7 @@ if __name__ == "__main__":
     saved_path = iris_classifier_service.save()
 ```
 
-The sample code above can be found in the BentoML repository, run the code with the
+The sample code above can be found in the BentoML repository, run them directly with the
 following command:
 
 ```bash
@@ -89,21 +86,35 @@ git clone git@github.com:bentoml/BentoML.git
 python ./bentoml/guides/quick-start/main.py
 ```
 
+After saving the BentoService instance, you can now start a REST API server with the model trained and test the API server locally:
+
+```bash
+# Start BentoML API server:
+bentoml serve IrisClassifier:latest
+```
+
+```bash
+# Send test request:
+curl -i \
+  --header "Content-Type: application/json" \
+  --request POST \
+  --data '[[5.1, 3.5, 1.4, 0.2]]' \
+  http://localhost:5000/predict
+```
+
 ### Deploy InferenceService
 
 Find the file directory of the SavedBundle with `bentoml get` command, which is
 directory structured as a docker build context. Running docker build with this
 directory produces a docker image containing the API model server. Replace
-`docker_username` with your Docker Hub username and run the following code:
+`{docker_username}` with your Docker Hub username and run the following code:
 
 ```shell
-# Replace DOCKER_USERNAME with the Docker Hub username
-docker_username=DOCKER_USERNAME
 model_path=$(bentoml get IrisClassifier:latest -q | jq -r ".uri.uri")
 
-docker build -t $docker_username/iris-classifier $model_path
+docker build -t {docker_username}/iris-classifier $model_path
 
-docker push $docker_username/iris-classifier
+docker push {docker_username}/iris-classifier
 ```
 
 *Note: BentoML's REST interface is different than the Tensorflow V1 HTTP API that
