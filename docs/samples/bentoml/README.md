@@ -1,11 +1,19 @@
 # Predict on an InferenceService using BentoML
 
-This example builds an iris classification model API server with BentoML and then deploys
-it as an InferenceService to a KFServing installed cluster.
+[BentoML](https://bentoml.org) is an open-source platform for high-performance ML model
+serving. It makes building production API endpoint for your ML model easy and supports all
+major machine learning training frameworks, including Tensorflow, Keras, PyTorch, XGBoost,
+scikit-learn and etc.
 
-[BentoML](https://bentoml.org) is an open-source framework for high-performance ML model
-serving. BentoML supports all major machine learning frameworks including Keras,
-Tensorflow, PyTorch, Fast.ai, XGBoost and etc.
+BentoML comes with a high-performance API model server with adaptive micro-batching
+support, which achieves the advantage of batch processing in online serving. It also
+provide model management and model deployment functionality, provides an end-to-end model
+serving workflow, with DevOps best practices baked in.
+
+In this guide, we will demo serving a scikit-learn based iris classifier model with
+BentoML as InferenceService on a Kubernetes cluster with KFServing installed. The same
+deployment steps is also applicable for models trained with other machine learning
+frameworks, see more BentoML examples [here](https://docs.bentoml.org/en/latest/examples.html).
 
 ## Deploy a custom InferenceService
 
@@ -21,11 +29,14 @@ Tensorflow, PyTorch, Fast.ai, XGBoost and etc.
     pip install bentoml scikit-learn
     ```
 
-### Build model API server using BentoML
+### Build API model server using BentoML
 
-Save the following code to a file named `iris_classifier.py`:
+The followwing code defines an API model server that requires a `scikit-learn` model, and
+asks BentoML to figure out the required PyPI pip packages automatically. It also defined
+an API, which is the entry point for accessing this prediction service. And the API is expecting a `pandas.DataFrame` object as its input data.
 
 ```python
+# iris_classifier.py
 from bentoml import env, artifacts, api, BentoService
 from bentoml.handlers import DataframeHandler
 from bentoml.artifact import SklearnModelArtifact
@@ -39,17 +50,13 @@ class IrisClassifier(BentoService):
         return self.artifacts.model.predict(df)
 ```
 
-This code defines a model API server that requires a `scikit-learn` model, and asks BentoML
-to figure out the required PyPI pip packages automatically. It also defined an API,
-which is the entry point for accessing this prediction service. And the API is expecting
-a `pandas.DataFrame` object as its input data.
-
-Run the following code to create a BentoService SavedBundle with the trained an iris
+The following code to create a BentoService SavedBundle with the trained an iris
 classification model. A BentoService SavedBundle is a versioned file archive ready for
 production deployment. The archive contains the model server defined above, python code
 dependencies, PyPi dependencies, and the trained iris classification model:
 
 ```python
+# main.py
 from sklearn import svm
 from sklearn import datasets
 
@@ -74,11 +81,19 @@ if __name__ == "__main__":
     saved_path = iris_classifier_service.save()
 ```
 
+Save and run above code or run the following command to create the iris classifier
+BentoService SavedBundle
+
+```bash
+git clone git@github.com:bentoml/BentoML.git
+python ./bentoml/guides/quick-start/main.py
+```
+
 ### Deploy InferenceService
 
 Find the file directory of the SavedBundle with `bentoml get` command, which is
 directory structured as a docker build context. Running docker build with this
-directory produces a docker image containing the model API server. Replace
+directory produces a docker image containing the API model server. Replace
 `docker_username` with your Docker Hub username and run the following code:
 
 ```shell
@@ -147,3 +162,10 @@ curl -v -H "Host: ${SERVICE_HOSTNAME}" \
 ```shell
 kubectl delete -f bentoml.yaml
 ```
+
+## Additional Resources
+
+* [GitHub repository](https://github.com/bentoml/BentoML)
+* [BentoML documentation](https://docs.bentoml.org)
+* [Quick start guide](https://docs.bentoml.org/en/latest/quickstart.html)
+* [Community](https://join.slack.com/t/bentoml/shared_invite/enQtNjcyMTY3MjE4NTgzLTU3ZDc1MWM5MzQxMWQxMzJiNTc1MTJmMzYzMTYwMjQ0OGEwNDFmZDkzYWQxNzgxYWNhNjAxZjk4MzI4OGY1Yjg)
