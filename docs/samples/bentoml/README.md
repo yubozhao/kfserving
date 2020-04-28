@@ -104,6 +104,9 @@ curl -i \
 
 ### Deploy InferenceService
 
+BentoML provides a convenient way of containerizing the model API server with Docker. To
+create a docker container image for the sample model above:
+
 Find the file directory of the SavedBundle with `bentoml get` command, which is
 directory structured as a docker build context. Running docker build with this
 directory produces a docker image containing the API model server. Replace
