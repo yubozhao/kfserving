@@ -81,8 +81,8 @@ if __name__ == "__main__":
     saved_path = iris_classifier_service.save()
 ```
 
-Save and run above code or run the following command to create the iris classifier
-BentoService SavedBundle
+The sample code above can be found in the BentoML repository, run the code with the
+following command:
 
 ```bash
 git clone git@github.com:bentoml/BentoML.git
