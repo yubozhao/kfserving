@@ -1,16 +1,11 @@
 # Predict on an InferenceService using BentoML
 
-This example trains a classification model using the iris data set and uses BentoML to
-serve the model via its high-performance API server and lastly deploy the BenoML API
-server as an InferenceService to a KFServing installed cluster for inferencing.
+This example deploys an iris classifier model API server built with BentoML as
+an InferenceService to a KFServing installed cluster.
 
 [BentoML](https://bentoml.org) is an open-source framework for high-performance ML model
-serving. It bundles ML models, preprocessing/post-processing code, model dependencies
-and model configuration into an API server that is ready to deploy to platforms such as
-AWS Lambda, Sagemaker, Google Cloud Run, Kubernetes, KNative, and more.
-
-BentoML supports all major machine learning frameworks including Keras, Tensorflow,
-PyTorch, Fast.ai, XGBoost and etc.
+serving. BentoML supports all major machine learning frameworks including Keras,
+Tensorflow, PyTorch, Fast.ai, XGBoost and etc.
 
 ## Deploy a custom InferenceService
 
@@ -21,20 +16,14 @@ PyTorch, Fast.ai, XGBoost and etc.
 * Docker and Docker hub must be properly configured on your local system
 * Python 3.6 or above
   * Install required packages `bentoml` and `scikit-learn` on your local system:
+
     ```shell
     pip install bentoml scikit-learn
     ```
 
-### Save classification model with BentoML
+### Build API model server using BentoML
 
-BentoML creates a model API server, via prediction service abstraction.
-
-The following code defines a prediction service that requires a `scikit-learn` model,
-and asks BentoML to figure out the required PyPI pip packages automatically. It
-also defined an API, which is the entry point for accessing this prediction service.
-And the API is expecting a `pandas.DataFrame` object as its input data.
-
-Save the code to a new file named `iris_classifier.py`:
+Save the following code to a file named `iris_classifier.py`:
 
 ```python
 from bentoml import env, artifacts, api, BentoService
@@ -50,7 +39,15 @@ class IrisClassifier(BentoService):
         return self.artifacts.model.predict(df)
 ```
 
-Run the following code to train a classifier model and save it with BentoML
+This code defines a model API server that requires a `scikit-learn` model, and asks BentoML
+to figure out the required PyPI pip packages automatically. It also defined an API,
+which is the entry point for accessing this prediction service. And the API is expecting
+a `pandas.DataFrame` object as its input data.
+
+Run the following code to create a BentoService SavedBundle with the trained an iris
+classification model. A BentoService SavedBundle is a versioned file archive ready for
+production deployment. The archive contains the model server defined above, python code
+dependencies and PyPi dependencies, and the trained iris classification model:
 
 ```python
 from sklearn import svm
@@ -79,8 +76,10 @@ if __name__ == "__main__":
 
 ### Deploy InferenceService
 
-BentoML generates a Dockerfile for model API server during the model saving process. Use
-that Dockerfile to build and push an API server image to Docker Hub.
+Find the file directory of the SavedBundle with `bentoml get` command, which is
+directory structured as a docker build context. Running docker build with this
+directory produces a docker image containing the model API server. Replace
+`docker_username` with your Docker Hub username and run the following code:
 
 ```shell
 # Replace DOCKER_USERNAME with the Docker Hub username
@@ -96,7 +95,7 @@ docker push $docker_username/iris-classifier
 KFServing expects. Requests will send directly to the prediction service and bypass the
 top-level InferenceService.*
 
-*Support for KFserving V2 prediction protocol with BentoML is coming soon.*
+*Support for KFServing V2 prediction protocol with BentoML is coming soon.*
 
 Replace the `{docker_username}` with your Docker Hub username and save the code to a
 file named `bentoml.yaml`:
