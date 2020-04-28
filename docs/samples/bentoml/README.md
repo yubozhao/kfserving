@@ -1,7 +1,7 @@
 # Predict on an InferenceService using BentoML
 
-This example deploys an iris classifier model API server built with BentoML as
-an InferenceService to a KFServing installed cluster.
+This example builds an iris classification model API server with BentoML and then deploys
+it as an InferenceService to a KFServing installed cluster.
 
 [BentoML](https://bentoml.org) is an open-source framework for high-performance ML model
 serving. BentoML supports all major machine learning frameworks including Keras,
@@ -21,7 +21,7 @@ Tensorflow, PyTorch, Fast.ai, XGBoost and etc.
     pip install bentoml scikit-learn
     ```
 
-### Build API model server using BentoML
+### Build model API server using BentoML
 
 Save the following code to a file named `iris_classifier.py`:
 
@@ -47,7 +47,7 @@ a `pandas.DataFrame` object as its input data.
 Run the following code to create a BentoService SavedBundle with the trained an iris
 classification model. A BentoService SavedBundle is a versioned file archive ready for
 production deployment. The archive contains the model server defined above, python code
-dependencies and PyPi dependencies, and the trained iris classification model:
+dependencies, PyPi dependencies, and the trained iris classification model:
 
 ```python
 from sklearn import svm
@@ -97,8 +97,9 @@ top-level InferenceService.*
 
 *Support for KFServing V2 prediction protocol with BentoML is coming soon.*
 
-Replace the `{docker_username}` with your Docker Hub username and save the code to a
-file named `bentoml.yaml`:
+The following is an example YAML file for specifying the resources required to run an
+InferenceService in KFServing. Replace `{docker_username}` with your Docker Hub username
+and save it to `bentoml.yaml` file:
 
 ```yaml
 apiVersion: serving.kubeflow.org/v1alpha2
@@ -117,7 +118,7 @@ spec:
             - containerPort: 5000
 ```
 
-Use `kubectl apply` to create a new InferenceService:
+Use `kubectl apply` command to deploy the InferenceService:
 
 ```shell
 kubectl apply -f bentoml.yaml
