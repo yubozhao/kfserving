@@ -79,7 +79,7 @@ if __name__ == "__main__":
     saved_path = iris_classifier_service.save()
 ```
 
-The sample code above can be found in the BentoML repository, run the code with the
+The sample code above can be found in the BentoML repository, run them directly with the
 following command:
 
 ```bash
