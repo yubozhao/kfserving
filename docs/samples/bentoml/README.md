@@ -86,7 +86,8 @@ git clone git@github.com:bentoml/BentoML.git
 python ./bentoml/guides/quick-start/main.py
 ```
 
-After saving the BentoService instance, you can now start a REST API server with the model trained and test the API server locally:
+After saving the BentoService instance, you can now start a REST API server with the
+model trained and test the API server locally:
 
 ```bash
 # Start BentoML API server:
