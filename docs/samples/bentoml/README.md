@@ -1,5 +1,10 @@
 # Predict on an InferenceService using BentoML
 
+In this guide, we will demo serving a scikit-learn based iris classifier model with BentoML
+and deploying the BentoML model server with KFServing. The same deployment
+steps is also applicable for models trained with other machine learning frameworks, see
+more BentoML examples [here](https://docs.bentoml.org/en/latest/examples.html).
+
 [BentoML](https://bentoml.org) is an open-source platform for high-performance ML model
 serving. It makes building production API endpoint for your ML model easy and supports all
 major machine learning training frameworks, including Tensorflow, Keras, PyTorch, XGBoost,
@@ -9,11 +14,6 @@ BentoML comes with a high-performance API model server with adaptive micro-batch
 which achieves the advantage of batch processing in online serving. It also provides model
 management and model deployment functionality, giving ML teams an end-to-end model serving
 workflow, with DevOps best practices baked in.
-
-In this guide, we will demo serving a scikit-learn based iris classifier model with BentoML
-as InferenceService on a Kubernetes cluster with KFServing installed. The same deployment
-steps is also applicable for models trained with other machine learning frameworks, see
-more BentoML examples [here](https://docs.bentoml.org/en/latest/examples.html).
 
 ## Deploy a custom InferenceService
 
