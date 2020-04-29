@@ -31,9 +31,10 @@ more BentoML examples [here](https://docs.bentoml.org/en/latest/examples.html).
 
 ### Build API model server using BentoML
 
-The followwing code defines an API model server that requires a `scikit-learn` model, and
+The following code defines a BentoML prediction service that requires a `scikit-learn` model, and
 asks BentoML to figure out the required PyPI pip packages automatically. It also defined
-an API, which is the entry point for accessing this prediction service. And the API is expecting a `pandas.DataFrame` object as its input data.
+an API, which is the entry point for accessing this prediction service. And the API is
+expecting a `pandas.DataFrame` object as its input data.
 
 ```python
 # iris_classifier.py
